@@ -1,10 +1,10 @@
-name: verify
+name: verify-0_10_0
 
 on:
   workflow_call:
 
 jobs:
-  verify:
+  verify-0_10_0:
     runs-on: [self-hosted, verify]
     timeout-minutes: 5
 
