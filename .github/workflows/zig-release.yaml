@@ -1,0 +1,37 @@
+name: zig-release
+
+on:
+  workflow_call:
+    inputs:
+      zig-version:
+        required: true
+        type: string
+      package-name:
+        required: true
+        type: string
+
+jobs:
+  zig-release:
+    runs-on: [self-hosted, release]
+    timeout-minutes: 10
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
+
+      - name: test
+        run: ~/zig-${{inputs.zig-version}}/zig build -Drelease-fast=true -Dtarget=x86_64-linux test
+
+      - name: build
+        run: ~/zig-${{inputs.zig-version}}/zig build -Drelease-fast=true -Dtarget=x86_64-linux
+
+      - name: rename
+        run: mv zig-out ${{inputs.package-name}}
+
+      - name: zip
+        run: tar -czf ${{inputs.package-name}}.tar.gz ${{inputs.package-name}}
+
+      - name: copy
+        run: mkdir -p ~/ci/builds/${{inputs.package-name}} && cp ${{inputs.package-name}}.tar.gz ~/ci/builds/${{inputs.package-name}}/${{inputs.package-name}}.`date '+%s'`.tar.gz
