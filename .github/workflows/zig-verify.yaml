@@ -1,0 +1,27 @@
+name: zig-verify
+
+on:
+  workflow_call:
+    inputs:
+      zig-version:
+        required: true
+        type: string
+
+jobs:
+  zig-verify:
+    runs-on: [self-hosted, verify]
+    timeout-minutes: 10
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
+
+      - name: build
+        run: ~/zig-${{inputs.zig-version}}/zig build
+
+      - name: test
+        run: ~/zig-${{inputs.zig-version}}/zig build test
+
+      - uses: gautamkrishnar/keepalive-workflow@v1
