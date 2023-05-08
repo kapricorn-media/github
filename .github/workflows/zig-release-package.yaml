@@ -4,11 +4,19 @@ on:
   workflow_call:
     inputs:
       zig-version:
-        required: true
         type: string
+        required: true
       package-name:
-        required: true
         type: string
+        required: true
+      zig-build-command:
+        type: string
+        required: false
+        default: "package"
+      package-subdir:
+        type: string
+        required: false
+        default: "."
 
 jobs:
   zig-release:
@@ -25,10 +33,10 @@ jobs:
         run: ~/zig-${{inputs.zig-version}}/zig build -Drelease-fast=true -Dtarget=x86_64-linux test
 
       - name: build
-        run: ~/zig-${{inputs.zig-version}}/zig build -Drelease-fast=true -Dtarget=x86_64-linux package
+        run: ~/zig-${{inputs.zig-version}}/zig build -Drelease-fast=true -Dtarget=x86_64-linux ${{inputs.zig-build-command}}
 
       - name: rename
-        run: mv zig-out ${{inputs.package-name}}
+        run: mv zig-out/${{inputs.package-subdir}} ${{inputs.package-name}}
 
       - name: zip
         run: tar -czf ${{inputs.package-name}}.tar.gz ${{inputs.package-name}}
