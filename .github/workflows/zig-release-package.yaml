@@ -16,7 +16,7 @@ on:
       package-subdir:
         type: string
         required: false
-        default: "."
+        default: ""
 
 jobs:
   zig-release:
