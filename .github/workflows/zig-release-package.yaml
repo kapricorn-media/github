@@ -17,6 +17,10 @@ on:
         type: string
         required: false
         default: ""
+      target:
+        type: string
+        required: false
+        default: "x86_64-linux"
 
 jobs:
   zig-release:
@@ -30,10 +34,10 @@ jobs:
           submodules: 'recursive'
 
       - name: test
-        run: ~/zig-${{inputs.zig-version}}/zig build -Drelease-fast=true -Dtarget=x86_64-linux test
+        run: ~/zig-${{inputs.zig-version}}/zig build -Drelease-fast=true -Dtarget=${{inputs.target}} test
 
       - name: build
-        run: ~/zig-${{inputs.zig-version}}/zig build -Drelease-fast=true -Dtarget=x86_64-linux ${{inputs.zig-build-command}}
+        run: ~/zig-${{inputs.zig-version}}/zig build -Drelease-fast=true -Dtarget=${{inputs.target}} ${{inputs.zig-build-command}}
 
       - name: rename
         run: mv zig-out/${{inputs.package-subdir}} ${{inputs.package-name}}
