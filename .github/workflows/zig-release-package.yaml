@@ -54,4 +54,4 @@ jobs:
         run: tar -czf output_archive.tar.gz ${{inputs.package-name}}
 
       - name: copy
-        run: mkdir -p ~/ci/builds/${{inputs.package-name}} && cp output_archive.tar.gz ~/ci/builds/${{inputs.package-name}}/${{inputs.package-name}}.${{inputs.target}}.`date '+%s'`.tar.gz
+        run: mkdir -p ~/ci/builds/${{inputs.package-name}} && cp output_archive.tar.gz ~/ci/builds/${{inputs.package-name}}/${{inputs.package-name}}_${{inputs.target}}.`date '+%s'`.tar.gz
