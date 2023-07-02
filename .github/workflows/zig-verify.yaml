@@ -4,8 +4,12 @@ on:
   workflow_call:
     inputs:
       zig-version:
-        required: true
         type: string
+        required: true
+      target:
+        type: string
+        required: false
+        default: "x86_64-linux"
 
 jobs:
   zig-verify:
@@ -19,9 +23,9 @@ jobs:
           submodules: 'recursive'
 
       - name: build
-        run: ~/zig-${{inputs.zig-version}}/zig build
+        run: ~/zig-${{inputs.zig-version}}/zig build -Dtarget=${{inputs.target}}
 
       - name: test
-        run: ~/zig-${{inputs.zig-version}}/zig build test
+        run: ~/zig-${{inputs.zig-version}}/zig build -Dtarget=${{inputs.target}} test
 
       - uses: gautamkrishnar/keepalive-workflow@v1
