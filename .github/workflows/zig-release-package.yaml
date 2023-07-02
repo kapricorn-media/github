@@ -51,7 +51,7 @@ jobs:
         run: mv zig-out/${{inputs.package-subdir}} ${{inputs.package-name}}
 
       - name: zip
-        run: tar -czf ${{inputs.package-name}}.tar.gz ${{inputs.package-name}}
+        run: tar -czf output_archive.tar.gz ${{inputs.package-name}}
 
       - name: copy
-        run: mkdir -p ~/ci/builds/${{inputs.package-name}} && cp ${{inputs.package-name}}.tar.gz ~/ci/builds/${{inputs.package-name}}/${{inputs.package-name}}.`date '+%s'`.tar.gz
+        run: mkdir -p ~/ci/builds/${{inputs.package-name}} && cp output_archive.tar.gz ~/ci/builds/${{inputs.package-name}}/${{inputs.package-name}}.${{inputs.target}}.`date '+%s'`.tar.gz
