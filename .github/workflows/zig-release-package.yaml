@@ -26,6 +26,10 @@ on:
         required: false
         default: "-Drelease-fast=true"
 
+# Hack for mach macos build
+env:
+  AGREE: true
+
 jobs:
   zig-release:
     runs-on: [self-hosted, release]
