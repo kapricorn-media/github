@@ -23,9 +23,9 @@ jobs:
           submodules: 'recursive'
 
       - name: build
-        run: ~/zig-${{inputs.zig-version}}/zig build -Dtarget=${{inputs.target}}
+        run: zigup run ${{inputs.zig-version}} build -Dtarget=${{inputs.target}}
 
       - name: test
-        run: ~/zig-${{inputs.zig-version}}/zig build -Dtarget=${{inputs.target}} test
+        run: zigup run ${{inputs.zig-version}} build -Dtarget=${{inputs.target}} test
 
       - uses: gautamkrishnar/keepalive-workflow@v1
