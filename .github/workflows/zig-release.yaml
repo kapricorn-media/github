@@ -55,3 +55,9 @@ jobs:
 
       - name: copy
         run: mkdir -p ~/ci/builds/${{inputs.package-name}} && cp output_archive.tar.gz ~/ci/builds/${{inputs.package-name}}/${{inputs.package-name}}_${{inputs.target}}.`date '+%s'`.tar.gz
+
+      - name: upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: build.tar.gz
+          path: output_archive.tar.gz
