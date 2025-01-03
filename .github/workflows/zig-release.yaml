@@ -59,5 +59,5 @@ jobs:
       - name: upload
         uses: actions/upload-artifact@v4
         with:
-          name: build.tar.gz
+          name: ${{inputs.package-name}}_${{inputs.target}}.`date '+%s'`.tar.gz
           path: output_archive.tar.gz
