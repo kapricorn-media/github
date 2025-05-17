@@ -27,5 +27,3 @@ jobs:
 
       - name: test
         run: zigup run ${{inputs.zig-version}} build -Dtarget=${{inputs.target}} test
-
-      - uses: gautamkrishnar/keepalive-workflow@v2
