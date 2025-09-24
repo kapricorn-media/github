@@ -42,10 +42,10 @@ jobs:
           submodules: 'recursive'
 
       - name: test
-        run: zigup run ${{inputs.zig-version}} build ${{inputs.releaseFlag}} -Dtarget=${{inputs.target}} test
+        run: zig ${{inputs.zig-version}} build ${{inputs.releaseFlag}} -Dtarget=${{inputs.target}} test
 
       - name: build
-        run: zigup run ${{inputs.zig-version}} build ${{inputs.releaseFlag}} -Dtarget=${{inputs.target}} ${{inputs.zig-build-command}}
+        run: zig ${{inputs.zig-version}} build ${{inputs.releaseFlag}} -Dtarget=${{inputs.target}} ${{inputs.zig-build-command}}
 
       - name: rename
         run: mv zig-out/${{inputs.package-subdir}} ${{inputs.package-name}}
