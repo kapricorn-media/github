@@ -12,7 +12,7 @@ on:
         default: "x86_64-linux"
 
 jobs:
-  zig-verify:
+  verify-debug:
     runs-on: [self-hosted, verify]
     timeout-minutes: 10
 
@@ -23,7 +23,23 @@ jobs:
           submodules: 'recursive'
 
       - name: build
-        run: zigup run ${{inputs.zig-version}} build -Dtarget=${{inputs.target}}
+        run: zigup run ${{inputs.zig-version}} build -Dtarget=${{inputs.target}} -Doptimize=Debug
 
       - name: test
-        run: zigup run ${{inputs.zig-version}} build -Dtarget=${{inputs.target}} test
+        run: zigup run ${{inputs.zig-version}} build -Dtarget=${{inputs.target}} -Doptimize=Debug test
+
+  verify-release:
+    runs-on: [self-hosted, verify]
+    timeout-minutes: 10
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+
+      - name: build
+        run: zigup run ${{inputs.zig-version}} build -Dtarget=${{inputs.target}} -Doptimize=ReleaseFast
+
+      - name: test
+        run: zigup run ${{inputs.zig-version}} build -Dtarget=${{inputs.target}} -Doptimize=ReleaseFast test
