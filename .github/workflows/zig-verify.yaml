@@ -23,10 +23,10 @@ jobs:
           submodules: 'recursive'
 
       - name: build
-        run: zigup run ${{inputs.zig-version}} build -Dtarget=${{inputs.target}} -Doptimize=Debug
+        run: zig ${{inputs.zig-version}} build -Dtarget=${{inputs.target}} -Doptimize=Debug
 
       - name: test
-        run: zigup run ${{inputs.zig-version}} build -Dtarget=${{inputs.target}} -Doptimize=Debug test
+        run: zig ${{inputs.zig-version}} build -Dtarget=${{inputs.target}} -Doptimize=Debug test
 
   verify-release:
     runs-on: [self-hosted, verify]
@@ -39,7 +39,7 @@ jobs:
           submodules: 'recursive'
 
       - name: build
-        run: zigup run ${{inputs.zig-version}} build -Dtarget=${{inputs.target}} -Doptimize=ReleaseFast
+        run: zig ${{inputs.zig-version}} build -Dtarget=${{inputs.target}} -Doptimize=ReleaseFast
 
       - name: test
-        run: zigup run ${{inputs.zig-version}} build -Dtarget=${{inputs.target}} -Doptimize=ReleaseFast test
+        run: zig ${{inputs.zig-version}} build -Dtarget=${{inputs.target}} -Doptimize=ReleaseFast test
