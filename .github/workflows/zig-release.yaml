@@ -9,22 +9,14 @@ on:
       package-name:
         type: string
         required: true
-      zig-build-command:
-        type: string
-        required: false
-        default: "package"
       package-subdir:
         type: string
         required: false
         default: ""
-      target:
+      buildArgs:
         type: string
         required: false
-        default: "x86_64-linux"
-      releaseFlag:
-        type: string
-        required: false
-        default: "-Drelease-fast=true"
+        default: "-Dtarget=x86_64-linux -Doptimize=ReleaseFast package"
 
 # Hack for mach macos build
 env:
@@ -41,11 +33,8 @@ jobs:
         with:
           submodules: 'recursive'
 
-      - name: test
-        run: zig ${{inputs.zig-version}} build ${{inputs.releaseFlag}} -Dtarget=${{inputs.target}} test
-
       - name: build
-        run: zig ${{inputs.zig-version}} build ${{inputs.releaseFlag}} -Dtarget=${{inputs.target}} ${{inputs.zig-build-command}}
+        run: zig ${{inputs.zig-version}} build ${{inputs.buildArgs}}
 
       - name: rename
         run: mv zig-out/${{inputs.package-subdir}} ${{inputs.package-name}}
