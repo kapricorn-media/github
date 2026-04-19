@@ -33,11 +33,11 @@ jobs:
         with:
           submodules: 'recursive'
 
-      - name: zigkm
-        uses: actions/checkout@v6
-        with:
-          repository: 'kapricorn-media/zigkm'
-          path: '../zigkm'
+      # - name: zigkm
+      #   uses: actions/checkout@v6
+      #   with:
+      #     repository: 'kapricorn-media/zigkm'
+      #     path: '../zigkm'
 
       - name: build
         run: zig ${{inputs.zig-version}} build ${{inputs.buildArgs}}
