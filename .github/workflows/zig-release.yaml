@@ -17,6 +17,15 @@ on:
         type: string
         required: false
         default: "-Dtarget=x86_64-linux -Doptimize=ReleaseFast package"
+      # Only used to name the output archive; the build target itself comes from buildArgs
+      target:
+        type: string
+        required: false
+        default: "x86_64-linux"
+      checkout-zigkm:
+        type: boolean
+        required: false
+        default: false
 
 # Hack for mach macos build
 env:
@@ -27,32 +36,47 @@ jobs:
     runs-on: [self-hosted, release]
     timeout-minutes: 10
 
+    # The repo is checked out to main/ so zigkm can sit next to it at ../zigkm
+    defaults:
+      run:
+        working-directory: main
+
+    env:
+      ZIG_VERSION: ${{inputs.zig-version}}
+      PACKAGE_NAME: ${{inputs.package-name}}
+      PACKAGE_SUBDIR: ${{inputs.package-subdir}}
+      BUILD_ARGS: ${{inputs.buildArgs}}
+      TARGET: ${{inputs.target}}
+
     steps:
       - name: checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
+          path: main
           submodules: 'recursive'
 
-      # - name: zigkm
-      #   uses: actions/checkout@v6
-      #   with:
-      #     repository: 'kapricorn-media/zigkm'
-      #     path: '../zigkm'
+      - name: zigkm
+        if: inputs.checkout-zigkm
+        uses: actions/checkout@v7
+        with:
+          repository: 'kapricorn-media/zigkm'
+          path: zigkm
 
       - name: build
-        run: zig ${{inputs.zig-version}} build ${{inputs.buildArgs}}
+        # BUILD_ARGS is intentionally unquoted so it splits into separate arguments
+        run: zig "$ZIG_VERSION" build $BUILD_ARGS
 
       - name: rename
-        run: mv zig-out/${{inputs.package-subdir}} ${{inputs.package-name}}
+        run: mv "zig-out/$PACKAGE_SUBDIR" "$PACKAGE_NAME"
 
       - name: zip
-        run: tar -czf output_archive.tar.gz ${{inputs.package-name}}
+        run: tar -czf output_archive.tar.gz "$PACKAGE_NAME"
 
       - name: copy
-        run: mkdir -p ~/ci/builds/${{inputs.package-name}} && cp output_archive.tar.gz ~/ci/builds/${{inputs.package-name}}/${{inputs.package-name}}_${{inputs.target}}.`date '+%s'`.tar.gz
+        run: mkdir -p ~/ci/builds/"$PACKAGE_NAME" && cp output_archive.tar.gz ~/ci/builds/"$PACKAGE_NAME"/"${PACKAGE_NAME}_${TARGET}.$(date '+%s').tar.gz"
 
       - name: upload
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ${{inputs.package-name}}_${{inputs.target}}.tar.gz
-          path: output_archive.tar.gz
+          path: main/output_archive.tar.gz
